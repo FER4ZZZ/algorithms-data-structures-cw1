@@ -1,0 +1,168 @@
+ЗАДАНИЕ №1. ВАРИАНТ 20
+Тема: Алгоритм поиска песни
+
+ПОСТАНОВКА ЗАДАЧИ
+Дана коллекция песен. Каждая песня имеет атрибуты:
+название, исполнитель, альбом, жанр, год.
+Пользователь задаёт поисковый запрос (ключевое слово
+и/или фильтры). Нужно найти все подходящие песни
+и вывести их список.
+
+ВХОДНЫЕ ДАННЫЕ:  массив песен songs[1..N], запрос query, фильтры.
+ВЫХОДНЫЕ ДАННЫЕ: список найденных песен results.
+
+АЛГОРИТМ
+1. Начало.
+2. Ввести songs, query и фильтры.
+3. results = пустой список.
+4. Для каждой песни song из songs:
+   4.1. Привести строки к нижнему регистру.
+   4.2. Если query — подстрока названия, исполнителя
+        или альбома, перейти к 4.3, иначе — к следующей.
+   4.3. Если заданные фильтры (жанр, год и т.п.)
+        выполнены — добавить song в results.
+5. Если results пуст — вывести "Ничего не найдено".
+   Иначе — отсортировать по релевантности и вывести.
+6. Конец.
+
+СЛОЖНОСТЬ: O(N * L), где N — число песен,
+L — длина строки. С индексами — быстрее.
+
+ЗАДАНИЕ №3
+
+#include <iostream>
+#include <iomanip>
+
+int main() {
+    // Коэффициенты упрощённого выражения
+    const double kA = 5.8;
+    const double kB = 14.4;
+
+    // Задаем переменные a и b
+    double a = 0.0;
+    double b = 0.0;
+
+    // Ввод исходных коэффициентов
+    std::cout << "Введите значение a: ";
+    std::cin >> a;
+
+    std::cout << "Введите значение b: ";
+    std::cin >> b;
+
+    // Вычисление результата по упрощённой формуле
+    const double result = kA * a - kB * b;
+
+    // Вывод результата
+    std::cout << std::fixed << std::setprecision(3);
+    std::cout << "Результат: " << result << std::endl;
+
+    return 0;
+}
+
+ЗАДАНИЕ №4
+
+// Вариант 20: Символ_1 = 'T', Символ_2 = 'a', Символ_3 = 'z'
+//
+// Программа читает коэффициенты a, b, c многочлена ax^2 + bx + c,
+// затем символ-команду:
+//   'T' - вывести фамилию и имя студента;
+//   'a' - вывести корни многочлена;
+//   'z' - считать три стороны и проверить, существует ли такой треугольник.
+
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+const char COMMAND_SHOW_NAME = 'T';
+const char COMMAND_SHOW_ROOTS = 'a';
+const char COMMAND_CHECK_TRIANGLE = 'z';
+
+// Выводит фамилию и имя студента
+void printStudentName() {
+    cout << "Ivanov Ivan" << endl; // TODO: подставить свои фамилию и имя
+}
+
+// Выводит корни многочлена ax^2 + bx + c (если они есть)
+void printRoots(double a, double b, double c) {
+    // Случай a = 0: многочлен вырождается в линейный или в константу
+    if (a == 0) {
+        if (b == 0) {
+            if (c == 0) {
+                cout << "x is any real number" << endl;
+            } else {
+                cout << "No roots" << endl;
+            }
+        } else {
+            cout << "x = " << -c / b << endl;
+        }
+        return;
+    }
+
+    // Обычное квадратное уравнение: считаем дискриминант
+    double discriminant = b * b - 4 * a * c;
+
+    if (discriminant < 0) {
+        cout << "No real roots" << endl;
+    } else if (discriminant == 0) {
+        cout << "x = " << -b / (2 * a) << endl;
+    } else {
+        double sqrtDiscriminant = sqrt(discriminant);
+        double firstRoot = (-b - sqrtDiscriminant) / (2 * a);
+        double secondRoot = (-b + sqrtDiscriminant) / (2 * a);
+        cout << "x1 = " << firstRoot << endl;
+        cout << "x2 = " << secondRoot << endl;
+    }
+}
+
+// Проверяет, можно ли построить треугольник со сторонами a, b, c
+bool canBuildTriangle(double sideA, double sideB, double sideC) {
+    // Стороны должны быть строго положительными
+    if (sideA <= 0 || sideB <= 0 || sideC <= 0) {
+        return false;
+    }
+
+    // Неравенство треугольника: каждая сторона меньше суммы двух других
+    return sideA + sideB > sideC
+        && sideA + sideC > sideB
+        && sideB + sideC > sideA;
+}
+
+// Запрашивает у пользователя три стороны и выводит результат проверки
+void handleTriangleCheck() {
+    double sideA, sideB, sideC;
+    cin >> sideA >> sideB >> sideC;
+
+    if (canBuildTriangle(sideA, sideB, sideC)) {
+        cout << "Triangle can be built" << endl;
+    } else {
+        cout << "Triangle cannot be built" << endl;
+    }
+}
+
+int main() {
+    double a, b, c;
+    char command;
+
+    // Ввод коэффициентов и символа-команды
+    cin >> a >> b >> c;
+    cin >> command;
+
+    // Выбор действия по введённому символу
+    switch (command) {
+        case COMMAND_SHOW_NAME:
+            printStudentName();
+            break;
+        case COMMAND_SHOW_ROOTS:
+            printRoots(a, b, c);
+            break;
+        case COMMAND_CHECK_TRIANGLE:
+            handleTriangleCheck();
+            break;
+        default:
+            cout << "Unknown command" << endl;
+            break;
+    }
+
+    return 0;
+}
